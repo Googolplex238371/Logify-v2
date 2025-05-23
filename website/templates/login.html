@@ -1,0 +1,31 @@
+{% extends "base.html" %}{%block title %}Login - Traditio{% endblock %}
+{% block content %}
+<style>
+.form{
+  text-align:center;
+  background-color:#D17777
+}
+.label{
+  padding-right:150px;
+}
+</style>
+<div style = "align-content:center;padding-top:50px;">
+<div class ="form" style="padding:10px;width:400px;height:500px">
+  <img src = "/static/favicon.png" height = 50 width = 50>
+  <p class = "logo">Traditio</p>
+<h1>Login</h1>
+<form method = "POST" class = "was-validated">
+<p class = "label" style="padding-right:175px;">Email: </p>
+<input type = "email" id = "email" name = "email" class="form-control"></input>
+<br />
+<br />
+<p class = "label">Password: </p>
+<input type = "password" id = "password" name = "password" class="form-control"></input>
+<br />
+<br />
+  <button type="submit" class="btn btn-primary" style = "background-color:black;border:none">Login</button>
+</form>
+<p>Don't have an account? <a href = "sign-up">Create one!</a></p>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}{%block title %}Food Finder - Traditio{% endblock %}
+{% block content %}
+<style>
+  #container {
+    position: relative;
+    text-align: left;
+    color: white;
+    scale:0.5;
+  }
+  #inner {
+    overflow: hidden;
+    width:20000px;
+  }
+  .child {
+    float: left;
+    background-color: blue;
+    width: 50px;
+    height: 50px;
+  }
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-375%, -50%);
+  }
+</style>
+<h1 style = "transform:translate(25.5%,0%)">Food Finder</h1>
+<p id = "text" style="display:block"></p>
+<div id = "container">
+<svg width="300" height="130" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="100" x="10" y="10" rx="20" ry="20" fill="#D17777" />
+</svg>
+<h1 class = "centered">Address</h1>
+</div>
+<input class = "form-control" style = "width:500px;transform:translate(80%,-225%)" id = "address" placeholder = "Enter your address here"/>
+<div id = "container">
+<svg width="300" height="130" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="100" x="10" y="10" rx="20" ry="20" fill="#D17777" />
+</svg>
+<h1 class = "centered" style = "transform:translate(-387.5%,-50%)">Cuisine</h1>
+</div>
+<input class = "form-control" style = "width:200px;transform:translate(200%, -225%)" id = "cuisine" placeholder = "Cuisine"/>
+<div id = "container">
+<svg width="300" height="130" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="100" x="10" y="10" rx="20" ry="20" fill="#D17777" />
+</svg>
+<h2 class = "centered" style = "transform:translate(-310%,-50%)">Atmosphere</h2>
+</div>
+<input class = "form-control" style = "width:200px;transform:translate(200%, -225%)" id = "atmosphere" placeholder = "Atmosphere"/>
+<button class="btn btn-primary" style = "background-color:#D17777;border:none;transform:translate(310%,0%)" onclick = "generate()">Generate!</button>
+<script>
+  function generate(){
+    var address = document.getElementById("address").value;
+    var cuisine = document.getElementById("cuisine").value;
+    var atmosphere = document.getElementById("atmosphere").value;
+    gemini("Find a restaurant in Singapore that suits the following criteria: within 5 km of "+ address +" and serves "+ cuisine + " cuisine and has a "+atmosphere+" atmosphere.",text)
+  }
+</script>
+{% endblock %}

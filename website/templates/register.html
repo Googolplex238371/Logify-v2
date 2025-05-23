@@ -1,0 +1,40 @@
+{% extends "base.html" %}{%block title %}Sign Up - Traditio{% endblock %}
+{% block content %}
+<style>
+.form{
+  text-align:center;
+  background-color:#D17777
+}
+.label{
+  padding-right:150px;
+}
+</style>
+<div style = "align-content:center;padding-top:50px;">
+<div class ="form" style="padding:10px;width:400px;height:650px;">
+  <img src = "/static/favicon.png" height = 50 width = 50>
+  <p class = "logo">Traditio</p>
+<h1>Sign Up</h1>
+<form method = "POST" class = "was-validated">
+<p class = "label" style="padding-right:175px;">Email: </p>
+<input class="form-control" type = "email" id = "email" name = "email" required></input>
+<br />
+<p class = "label">Password: </p>
+<input class="form-control" type = "password" id = "password1" name = "password1" required></input>
+<br />
+<p class = "label" style="padding-left:75px">Password (Confirm):</p>
+  <input class="form-control" type = "password" id = "password2" name = "password2" required></input>
+  <br />
+  <p class = "label" style="padding-left:75px">Ethnicity:</p>
+<select class="form-control" class = "ethnicity" id = "ethnicity" name = "ethnicity" required>
+  {%for option in ["Malay" , "Chinese", "Indian", "Filippino","Japanese","Vietnamese","Other"] %}
+  <option value = "{{option}}">{{option}}</option>
+  {%endfor%}
+</select>
+  <br />
+  <div id = "other" style="display:none">
+    <p></p>
+  </div>
+  <button type="submit" class="btn btn-primary" style = "background-color:black;border:none">Sign Up</button>
+</form>
+<p>Already have an account? <a href = "login">Log In!</a></p>
+{% endblock %}

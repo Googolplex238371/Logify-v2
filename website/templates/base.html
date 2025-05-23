@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <script>
+    d = new Date()
+    m = d.getMonth()
+    culture = ["Indian","Chinese","Malay","Filippino","Japanese","Vietnamese","Thai","European","Middle Eastern","North American","South American"].reverse()[m]
+    function gemini(text,element_id){
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyD7bt5GRn3x2-9yNLBVLKV5GUl7_bJiRAs', {method:'POST',
+                                                                                                                                                         headers:{'Content-Type':'application/json'},
+                                                                                                                                                         body:JSON.stringify({"contents":[{"parts":[{"text":text}]}]})}).then((response)=>response.json()).then((data)=>func(data))
+    function func(d){
+      console.log(d)
+      document.getElementById(element_id).innerHTML=marked(d["candidates"][0]["content"]["parts"][0]["text"])
+    } 
+    }
+  </script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
+    <style>
+  button{
+    background-color:Black;
+    border:none
+}
+      .loader {
+  border: 16px solid #999999;
+  border-radius: 50%;
+  border-top: 16px solid #222222;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  border:none
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.hidden {
+  height: 0px;
+  width:0%;
+  background-color: none;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+      .logo{
+        font-family:"UnifrakturCook"
+      }
+body {
+          font-family: 'Baskervville';
+      }
+      h1 {
+                font-family: 'Baskervville';
+            }
+      p {
+                font-family: 'Baskervville'
+      }
+      span {
+                font-family: 'Baskervville'
+      }
+      nav {
+                font-family: 'Baskervville'
+      }
+      a{
+        font-family:"Baskervville"
+      }
+      div {
+                font-family: 'Baskervville'
+      }
+      input{
+        font-family:'Baskervville'
+      }
+</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous"/>
+<link rel="icon" type="image/x-icon" href="static/favicon.png">
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+  <body style='background-color:#F4E7E7'>
+    <link href='https://fonts.googleapis.com/css?family=Baskervville' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=UnifrakturCook:700' rel='stylesheet'>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"type="button"data-toggle="collapse"data-target="#navbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+          <img src = "/static/favicon.png"height = 50 width = 50>
+          {% if user.is_authenticated %}
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+          <a class="nav-item nav-link" id="home" href="/food">Food</a>
+          <a class="nav-item nav-link" id="lang" href="/language-learning">Language</a>
+          <a class="nav-item nav-link" id="eande" href="/experiences-and-events">Experiences & Events</a>
+          <a class="nav-item nav-link" id="penpals" href="/penpals">Pen Pals</a>
+          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+          <a class = "nav-item nav-link">{{user.email}}</a>
+      </div>
+          {% else %}
+          <a class="nav-item nav-link" id="login" href="/login">Login</a>
+          <a class="nav-item nav-link" id="signup" href="/sign-up">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{message}}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% elif category == "success" %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {%else%}
+    <div class="alert alert-warning alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+    <div class="container">{% block content %}<!-- This is where the code will go -->{% endblock %}</div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
