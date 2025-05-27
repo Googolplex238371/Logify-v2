@@ -1,0 +1,30 @@
+{%extends 'base.html'%}
+{%block title%}AI Generated Portfolios{%endblock%}
+{%block content%}
+<form method = "POST">
+<p id = "text"></p>
+<input id = "input" name = "portfolio" hidden />
+</form>
+<button class="btn btn-primary" style = "background-color:black;border:none" onclick = "gemini()">Generate Portfolio!</button>
+{%if logs == []%}
+<script>
+  location.href = "/"
+</script>
+{%else%}
+<script>
+  function gemini(){
+    document.getElementById("text").innerHTML = "Generating portfolio..."
+fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyD7bt5GRn3x2-9yNLBVLKV5GUl7_bJiRAs', {method:'POST',
+                                                                                                                                                     headers:{'Content-Type':'application/json'},
+                                                                                                                                                     body:JSON.stringify({"contents":[{"parts":[{"text":"Generate a summary of the following portfolio for me that would attract universities and/or employers in first person using only these logs, not a template, with the following array being their logs, and please separate each log by 3 line breaks: {{logs}}. Please give them as a stylistic, appealing portfolio text that is just a single p tag and can be inserted into a resume. Do not use markdown. The format of each row of the array is as follows: [user name, skills displayed ,assesor email, description , assessor feedback,date UTC]. Give the log name as a sub title. I AM NOT MY OWN ASSESSOR, AND THE FEEDACK WAS GIVEN BY SOMEONE ELSE, SO WRITE THAT IN THIRD PERSON. I ALSO AM 100% CERTAIN WHO THE ASSESSOR IS. ALSO PLEASE ADD A PORTFOLIO TITLE."}]}]})}).then((response)=>response.json()).then((data)=>func(data))
+function func(d){
+  alert(d["candidates"][0]["content"]["parts"][0]["text"])
+  console.log(d)
+  document.getElementById("text").innerHTML=marked(d["candidates"][0]["content"]["parts"][0]["text"])
+  document.getElementById("input").value=document.getElementById("text").innerHTML
+  document.getElementById("text").innerHTML=marked(d["candidates"][0]["content"]["parts"][0]["text"])+'<button class="btn btn-primary" style = "background-color:black;border:none" type = "submit">Save Portfolio</button>'
+} 
+}
+</script>
+{%endif%}
+{%endblock%}

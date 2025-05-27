@@ -1,135 +1,90 @@
 <!DOCTYPE html>
 <html>
-  <script>
-    d = new Date()
-    m = d.getMonth()
-    culture = ["Indian","Chinese","Malay","Filippino","Japanese","Vietnamese","Thai","European","Middle Eastern","North American","South American"].reverse()[m]
-    function gemini(text,element_id){
-    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyD7bt5GRn3x2-9yNLBVLKV5GUl7_bJiRAs', {method:'POST',
-                                                                                                                                                         headers:{'Content-Type':'application/json'},
-                                                                                                                                                         body:JSON.stringify({"contents":[{"parts":[{"text":text}]}]})}).then((response)=>response.json()).then((data)=>func(data))
-    function func(d){
-      console.log(d)
-      document.getElementById(element_id).innerHTML=marked(d["candidates"][0]["content"]["parts"][0]["text"])
-    } 
-    }
-  </script>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
-    <style>
-  button{
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<style>
+#main {
+  position:relative; 
+  z-index: 1;  
+  height: 400px; 
+  width:400px;
+} 
+#wifi {
+        font-size:100px;
+        position:absolute; 
+        z-index: -1; 
+        height: 80px; 
+        width:200px;   
+  opacity:0;
+}
+#ban {
+  font-size:100px;
+  z-index: -1;
+  position: absolute;
+  left:16px;
+  opacity:0
+}
+  #h3{
+    opacity:0;
+  }
+button{
     background-color:Black;
     border:none
+p{
+  font-family:"Monaco", monospace
 }
-      .loader {
-  border: 16px solid #999999;
-  border-radius: 50%;
-  border-top: 16px solid #222222;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-  border:none
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.hidden {
-  height: 0px;
-  width:0%;
-  background-color: none;
-}
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-.slider.round {
-  border-radius: 34px;
-}
-.slider.round:before {
-  border-radius: 50%;
-}
-      .logo{
-        font-family:"UnifrakturCook"
-      }
-body {
-          font-family: 'Baskervville';
-      }
-      h1 {
-                font-family: 'Baskervville';
-            }
-      p {
-                font-family: 'Baskervville'
-      }
-      span {
-                font-family: 'Baskervville'
-      }
-      nav {
-                font-family: 'Baskervville'
-      }
-      a{
-        font-family:"Baskervville"
-      }
-      div {
-                font-family: 'Baskervville'
-      }
-      input{
-        font-family:'Baskervville'
-      }
 </style>
+  <script>
+    window.onload = function(){
+    a = 0
+    setInterval(function(){
+      wifi = document.getElementById("wifi")
+      h3 = document.getElementById("h3")
+      if(!window.navigator.onLine){
+        wifi.style.opacity = "1.0"
+        h3.style.opacity = "1.0"
+        document.getElementById("content").style.display = "none"
+        document.getElementById("main").style.display="block";
+        document.getElementById("ban").style.opacity = Math.abs(Math.sin(a)).toString();
+        a+=Math.PI/135
+      }
+      else{
+        document.getElementById("content").style.display = "block"
+        document.getElementById("main").style.display = "none";
+        a=0
+        h3.style.opacity = "0.0"
+        wifi.style.opacity = "0.0"
+      }
+    },10)
+    }
+      </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"crossorigin="anonymous"/>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous"/>
-<link rel="icon" type="image/x-icon" href="static/favicon.png">
-    <title>{% block title %}Home{% endblock %}</title>
+<script src = "https://smtpjs.com/v3/smtp.js"></script>
+    <script src = "https://unpkg.com/read-excel-file@4.x/bundle/read-excel-file.min.js"></script>
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <title>{% block title %}{% endblock %}</title>
   </head>
-  <body style='background-color:#F4E7E7'>
-    <link href='https://fonts.googleapis.com/css?family=Baskervville' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=UnifrakturCook:700' rel='stylesheet'>
+  <body style = "font-family: Monaco,monospace;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <button
         class="navbar-toggler"type="button"data-toggle="collapse"data-target="#navbar"
@@ -138,19 +93,34 @@ body {
       </button>
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
-          <img src = "/static/favicon.png"height = 50 width = 50>
+          <img id = "favicon" src = "/static/favicon.png" height = 40 width = 50>
           {% if user.is_authenticated %}
           <a class="nav-item nav-link" id="home" href="/">Home</a>
-          <a class="nav-item nav-link" id="home" href="/food">Food</a>
-          <a class="nav-item nav-link" id="lang" href="/language-learning">Language</a>
-          <a class="nav-item nav-link" id="eande" href="/experiences-and-events">Experiences & Events</a>
-          <a class="nav-item nav-link" id="penpals" href="/penpals">Pen Pals</a>
+          {%if user.admin%}
+          <a class = "nav-item nav-link" id = "add_user" href = "/add-users">Add Users Manually</a>
+          <a class = "nav-item nav-link" id = "upload_users" href = "/upload-users">Upload Users</a>
+          <a class = "nav-item nav-link" id = "view_users" href = "/view-users">View Users</a>
+          {%elif not user.teacher%}
+          <a class = "nav-item nav-link" id = "view_logs" href = "/view-logs">View Logs</a>
+          <a class = "nav-item nav-link" id = 'portfolio' href = "/portfolio/{{user.email}}">Portfolio</a>
+          <a class = "nav-item nav-link" id = 'suggest' href = "/ai-suggest">Coach</a>
+          {%else%}
+          <a class = "nav-item nav-link" id = "notifications" href = "/notifications">Notifications <span id = "notifs" class = "badge badge-light"></span></a>
+          <script>
+            fetch("/get-logs",{
+              method:"POST"
+            }).then((response)=>response.json()).then((data)=>add_badge(data.data))
+          function add_badge(data){
+            document.getElementById("notifs").innerHTML = data
+          }
+          </script>
+          {%endif%}
           <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-          <a class = "nav-item nav-link">{{user.email}}</a>
-      </div>
+          <a class = "nav-item nav-link" id = "name">{{user.name}}</a>
           {% else %}
           <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signup" href="/sign-up">Sign Up</a>
+          <a class = "nav-item nav-link" id = "forgot" href = "/forgot">Forgot Password</a>
+          <a class = "nav-item nav-link" id = "confirm" href = "/confirm">Verify Account</a>
           {% endif %}
         </div>
       </div>
@@ -159,7 +129,7 @@ body {
     messages %} {% for category, message in messages %} {% if category ==
     'error' %}
     <div class="alert alert-danger alter-dismissable fade show" role="alert">
-      {{message}}
+      {{ message }}
       <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -179,8 +149,16 @@ body {
       </button>
     </div>
     {% endif %} {% endfor %} {% endif %} {% endwith %}
-
-    <div class="container">{% block content %}<!-- This is where the code will go -->{% endblock %}</div>
+    <div class="container" id = "content" style = "display:block">{% block content %}<!-- This is where the code will go -->{% endblock %}</div>
+    <div id="main" style = "display:block">
+      <div id="wifi"> 
+      <h1 class = "fa">&#xf1eb;</h1> 
+      </div>
+      <div id="ban"> 
+        <h1 class = "fa" style="color :red">&#xf05e;</h1> 
+      </div>
+      <h3 id = "h3">No Internet Connection</h3>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

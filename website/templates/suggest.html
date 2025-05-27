@@ -1,0 +1,62 @@
+{%extends 'base.html'%}
+{%block title%}AI Generated Portfolios{%endblock%}
+{%block content%}
+
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <div class = "msgs" id = "chat">
+    <br />
+  <div id = 'text' markdown = "1"></div>
+  <main>
+    <textarea id = "input" style = "width:90%"></textarea>
+  <button onclick = "gemini()" style = "background:none;border:none"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+<path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+</svg></button>
+  </main>
+  </div>
+  <script>
+    document.getElementById("text").innerHTML+="<div class = 'row'>"+'<img src="/static/avatar.png" alt="Avatar" class="avatar">'+"<div class='card'><div class='card-body'>Hey there! I'll be your mentor to help you attain your dream university and/or job!</div></div>"+"</div><br />"
+    context = ""
+    length = 0
+    function gemini(){
+      if(document.getElementById("input").value == ""){
+    alert("Please enter a question")
+        return ""
+      }
+      context+="User: "+document.getElementById("input").value+"\n"
+      document.getElementById("text").innerHTML+='<div class = "sent"><div class="card"><div class="card-body">'+document.getElementById("input").value+"</div></div></div><br />"
+       document.getElementById("input").value = ""
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyD7bt5GRn3x2-9yNLBVLKV5GUl7_bJiRAs', {method:'POST',
+                                                                                                                                                         headers:{'Content-Type':'application/json'},
+                                                                                                                                                         body:JSON.stringify({"contents":[{"parts":[{"text":"Craft a response as a coach powered by Gemini 1.5 Flash to the user, who uses Logify. Logify is a software for people to log their skills and activities. For context, here are the user's logs in an array: {{logs}}. The format for the array is: [name,skill(s),assesor email,description,feedback,date]. Here are the previous messages: "+context+". If it is blank, there are no previous messages. The user asked: "+document.getElementById("input").value+" Maintain factual accuracy in your responses, adjusting your tone and personality to match the user's (unless the user is rude). Where appropriate and relevant to the conversation, briefly reference statistics that say doing XYZ is best for the job/college they aspire to attain. But don't tell them that you will mention facts. Just answer the question. Respond in the language of the question. NO BLANKS, so DO NOT DO: [enter statistic]. You must give the response in 2 pars, separated by this: [NOTES], where you will take notes (in a single line without any markdown) on the user's responses for key details. Here are the notes you have made thus far, before this conversation began: {{user.notes}}"}]}]})}).then((response)=>response.json()).then((data)=>func(data))
+    function f(note){
+      fetch("/add-notes",{
+        method:"POST",
+        body:JSON.stringify({"notes":note,"email":"{{user.email}}"})
+      }).then(alert("Done"))
+    }
+    function func(d){
+      document.getElementById("text").innerHTML+="<div class = 'row'>"+'<img src="/static/avatar.png" alt="Avatar" class="avatar">'+'<div class="card"><div class="card-body">'+marked(d["candidates"][0]["content"]["parts"][0]["text"]).split("[NOTES]")[0]+"</div></div>"+"</div><br />"
+      context+="You: "+d["candidates"][0]["content"]["parts"][0]["text"].split("[NOTES]")[0]+"\n"
+      length++
+      if(length>10){
+        context = context.split("\n")
+        context.splice(0,2)
+        context = context.join("\n")
+      }
+    f(d["candidates"][0]["content"]["parts"][0]["text"].split("[NOTES]")[1]).then(openForm())
+    }}
+    function openForm() {
+      document.getElementById("chat").style.display = "block";
+      document.getElementById("open").style.display = "none";
+      document.getElementById("close").style.display = "block";
+    }
+
+    function closeForm() {
+    document.getElementById("chat").style.display = "none";
+      document.getElementById("open").style.display = "block";
+      document.getElementById("close").style.display = "none";
+    }
+  </script>
+<button onclick = "openForm()" style = "display:none" id = "open">Open</button>
+<button onclick = "closeForm()" id = "close" style = "display:none">Close</button>
+{%endblock%}
