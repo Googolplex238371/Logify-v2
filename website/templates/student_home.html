@@ -113,7 +113,6 @@
         if(document.getElementById("skill").value != ""){
           if(document.getElementById("description").value!=""){
             if(cont){
-
               x = fetch("/add-log", {
                 method: "POST",
               }).then((response)=>response.json()).then((data)=>finish(data.data))

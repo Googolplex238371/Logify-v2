@@ -17,7 +17,7 @@
     document.getElementById("text").innerHTML+="<div class = 'row'>"+'<img src="/static/avatar.png" alt="Avatar" class="avatar">'+"<div class='card'><div class='card-body'>Hey there! I'll be your mentor to help you attain your dream university and/or job!</div></div>"+"</div><br />"
     context = ""
     length = 0
-    function gemini(){
+    function gemini(api_key){
       if(document.getElementById("input").value == ""){
     alert("Please enter a question")
         return ""
@@ -25,7 +25,7 @@
       context+="User: "+document.getElementById("input").value+"\n"
       document.getElementById("text").innerHTML+='<div class = "sent"><div class="card"><div class="card-body">'+document.getElementById("input").value+"</div></div></div><br />"
        document.getElementById("input").value = ""
-    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyD7bt5GRn3x2-9yNLBVLKV5GUl7_bJiRAs', {method:'POST',
+    fetch('/gemini', {method:'POST',
                                                                                                                                                          headers:{'Content-Type':'application/json'},
                                                                                                                                                          body:JSON.stringify({"contents":[{"parts":[{"text":"Craft a response as a coach powered by Gemini 1.5 Flash to the user, who uses Logify. Logify is a software for people to log their skills and activities. For context, here are the user's logs in an array: {{logs}}. The format for the array is: [name,skill(s),assesor email,description,feedback,date]. Here are the previous messages: "+context+". If it is blank, there are no previous messages. The user asked: "+document.getElementById("input").value+" Maintain factual accuracy in your responses, adjusting your tone and personality to match the user's (unless the user is rude). Where appropriate and relevant to the conversation, briefly reference statistics that say doing XYZ is best for the job/college they aspire to attain. But don't tell them that you will mention facts. Just answer the question. Respond in the language of the question. NO BLANKS, so DO NOT DO: [enter statistic]. You must give the response in 2 pars, separated by this: [NOTES], where you will take notes (in a single line without any markdown) on the user's responses for key details. Here are the notes you have made thus far, before this conversation began: {{user.notes}}"}]}]})}).then((response)=>response.json()).then((data)=>func(data))
     function f(note){

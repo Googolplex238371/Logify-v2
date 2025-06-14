@@ -241,3 +241,14 @@ def add_notes():
     user.notes+=notes
     db.session.commit()
     return jsonify({})
+@views.route("/gemini",methods=["GET","POST"])
+def gemini():
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"
+    
+    headers = {
+        "Content-Type": "application/json"
+    }
+  
+    data = json.loads(request.data)
+    response = requests.post(f"{url}?key={key}", headers=headers, json=data)
+    return jsonify(response.json())
